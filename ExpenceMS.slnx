@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Expence.Application/Expense.Application.csproj" Id="57757f2f-168a-4d06-8b60-670bc3b7ece0" />
+  <Project Path="Expence.Domain/Expense.Domain.csproj" Id="71a7b579-3023-4208-99eb-1241b3cd6dd9" />
+  <Project Path="ExpenceMS/ExpenceMS.csproj" />
+  <Project Path="Expense.Infrastructure/Expense.Infrastructure.csproj" Id="023920a0-6b9a-47d2-8e16-ef06e3c81c47" />
+</Solution>

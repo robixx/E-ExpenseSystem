@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="login-card">
+    <div class="card-header">
+        <h3>Welcome to EMS</h3>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>SIGN IN
+            </button>
+
+           
+        </form>
+
+        <div class="signup-section d-none">
+            <p>Don't have an account?</p>
+            <a href="#">
+                SIGN UP NOW
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Add some interactive functionality
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Get form values
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Simple validation
+        if (username && password) {
+            // Add loading state
+            const submitBtn = document.querySelector('.btn-login');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
+            submitBtn.disabled = true;
+
+            // Simulate login process
+            setTimeout(() => {
+                alert('Login functionality would be implemented here!');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        }
+    });
+
+    // Add hover effects to links
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-1px)';
+        });
+
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
