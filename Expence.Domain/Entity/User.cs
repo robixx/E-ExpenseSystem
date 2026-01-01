@@ -15,6 +15,7 @@ namespace Expense.Domain.Entity
         public string UserEmail { get; set; }= string.Empty;
         public string UserPhone { get; set; }=string.Empty;
         public string ImageName {  get; set; }=string.Empty;
+        public string Gender {  get; set; }=string.Empty;
         public int IsActive { get; set; }
         public int FamilyMenber { get; set; }
         public DateTime CreateDate { get; set; }= DateTime.Now;  

@@ -1,4 +1,5 @@
 ﻿using Expense.Application.Interface;
+using Expense.Application.ModelViews;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -23,7 +24,8 @@ namespace ExpenceMS.Areas.Admin.Controllers
 
         public async Task<IActionResult> AddUser()
         {
-            return View();
+            UserDto userlist= new UserDto();
+            return View(userlist);
         }
     }
 }
