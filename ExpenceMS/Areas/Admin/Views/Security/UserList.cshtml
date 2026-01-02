@@ -1,5 +1,4 @@
-﻿
-@model List<Expense.Application.ModelViews.UserDto>
+﻿@model List<Expense.Application.ModelViews.UserDto>
 
 @{
     ViewData["Title"] = "User List";
@@ -20,13 +19,12 @@
     <div class="card recent-sales overflow-auto">
 
         <div class="card-body">
-            <h5 class="card-title">Recent User <span>| </span> <a class="btn btn-primary btn-sm" href="@Url.Action("AddUser","Security",new{Area="Admin"})"><i class="bi bi-plus"></i> Add New User</a> </h5>
+            <h5 class="card-title">Recent User <span>| </span> <a class="btn btn-primary btn-sm" href="@Url.Action("AddUser", "Security", new { Area = "Admin" })"><i class="bi bi-plus"></i> Add New User</a> </h5>
 
             <table class="table table-borderless datatable">
                 <thead style="font-size:15px;">
                     <tr>
                         <th>#</th>
-                        <th>UserId</th>
                         <th>Image</th>
                         <th>Name</th>
                         <th>Email</th>
@@ -36,20 +34,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var item in Model)
+                    @foreach (var item in Model)
                     {
                         <tr>
                             <th scope="row">@i</th>
-                            <td>@item.UserId</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ImageName))
+                                {
+                                    <img src="@Url.Action("Image", "Security", new { area = "Admin", fileName = item.ImageName })"
+                                         alt="User Image" style="width:40px; height:40px; object-fit:cover; border-radius:50%;" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/default-avatar.png" alt="No Image" style="width:40px; height:40px; object-fit:cover; border-radius:50%;" />
+                                }
+                            </td>
                             <td>@item.UserName</td>
-                            <td>@item.UserEmail</td>
                             <td>@item.UserEmail</td>
                             <td>@item.UserPhone</td>
                             <td><span class="badge bg-success">Active</span></td>
                             <td></td>
                         </tr>
+                        i++;
                     }
-                   
+
                 </tbody>
             </table>
 

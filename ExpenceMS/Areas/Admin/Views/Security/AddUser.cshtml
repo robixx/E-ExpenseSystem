@@ -12,7 +12,7 @@
     }
 
     .avatar-block {
-        background:#ebedef;
+        background: #ebedef;
         border-radius: .75rem 0 0 .75rem;
     }
 
@@ -34,8 +34,8 @@
 </div><!-- End Page Title -->
 <div class="col-12">
     <div class="card shadow-sm">
-        
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+        <form asp-action="AddUser" asp-controller="Security" asp-area="Admin" method="post" enctype="multipart/form-data">
             <div class="row g-0">
                 <!-- LEFT: avatar block -->
                 <div class="col-md-4 avatar-block d-flex flex-column align-items-center justify-content-center p-4">
@@ -46,89 +46,77 @@
                                for="imgUpload" style="width:36px;height:36px;">
                             <i class="bi bi-camera"></i>
                         </label>
-                        <input type="file" id="imgUpload" accept="image/*" hidden
+                        <input type="file" id="imgUpload" name="image" accept="image/*" hidden
                                onchange="document.getElementById('avatarImg').src=window.URL.createObjectURL(this.files[0])">
                     </div>
                     <div class="mt-3 text-center">
-                        <div class="fw-semibold" id="fullNameLabel">Alexa Rowles</div>
+                        @*   <div class="fw-semibold" id="fullNameLabel">Alexa Rowles</div> *@
                         <div class="small text-muted">Full Name</div>
                     </div>
                 </div>
 
                 <!-- RIGHT: fields block -->
                 <div class="col-md-8">
-                    <div class="card-body">   
+                    <div class="card-body">
                         <div class="card-title text-center">  <h5 class="mb-4">User Profile Create</h5> </div>
-                                                   
+
 
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="form-label">User Name</label>
-                                <input type="text" name="UserName" value="@Model.UserName" class="form-control" required>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Your User Name", required = "required" })
                             </div>
                             <!-- Last Name -->
                             <div class="col-md-6">
                                 <label class="form-label">Email</label>
-                                <input type="text" name="email" class="form-control" value="@Model.UserEmail">
+                                @Html.TextBoxFor(m => m.UserEmail, new { @class = "form-control", placeholder = "Your Email", type = "email" })
                             </div>
                         </div>
                         <div class="row mb-2">
                             <!-- Nick Name -->
                             <div class="col-md-6">
                                 <label class="form-label">Mobile</label>
-                                <input type="text" class="form-control" placeholder="Your Nick Name">
+                                @Html.TextBoxFor(m => m.UserPhone, new { @class = "form-control", placeholder = "Your Mobile Number" })
                             </div>
                             <!-- Gender -->
                             <div class="col-md-6">
                                 <label class="form-label">Gender</label>
-                                <select class="form-select">
-                                    <option selected disabled>Select Gender</option>
-                                    <option>Female</option>
-                                    <option>Male</option>
-                                    <option>Other</option>
-                                </select>
+                                @Html.DropDownListFor(model => model.Gender, ViewBag.gender as List<SelectListItem>, " Select Gender ", new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="row mb-2">
                             <!-- Country -->
                             <div class="col-md-6">
                                 <label class="form-label">Status</label>
-                                <select class="form-select">
-                                    <option selected disabled>Select</option>
-                                    <option>Active</option>
-                                    <option>In-Active</option>
-                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.IsActive, ViewBag.Status as List<SelectListItem>, "  Select Status  ", new { @class = "form-control" })
                             </div>
                             <!-- Language -->
                             <div class="col-md-6">
                                 <label class="form-label">Family Member</label>
-                                <input type="text" class="form-control" value="2">
+                                @Html.TextBoxFor(m => m.FamilyMenber, new { @class = "form-control", type = "number" })
                             </div>
                         </div>
                         <div class="row mb-2">
                             <!-- Time Zone -->
                             <div class="col-md-6">
                                 <label class="form-label">Date Time</label>
-                                <input type="datetime" class="form-control" >
+                                @Html.TextBoxFor(m => m.CreateDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                             </div>
-                            
+
                         </div>
 
-                   
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="form-label">Login User Name</label>
-                                    <input type="text" class="form-control" value="Alexa">
-                                </div>
-                                <!-- Last Name -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Password</label>
-                                    <input type="text" class="form-control" value="Rowles">
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Login User Name</label>
+                                @Html.TextBoxFor(m => m.LoginName, new { @class = "form-control", placeholder = "Enter your Login name", required = "required" })
                             </div>
-                     
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <label class="form-label">Password</label>
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password", required = "required" })
+                            </div>
+                        </div>
+
 
 
                         <!-- Submit -->

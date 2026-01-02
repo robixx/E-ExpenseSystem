@@ -19,7 +19,7 @@ namespace Expense.Domain.Entity
         public int IsActive { get; set; }
         public int FamilyMenber { get; set; }
         public DateTime CreateDate { get; set; }= DateTime.Now;  
-        public DateTime LastLogin { get; set; }  
+        
 
     }
 }
