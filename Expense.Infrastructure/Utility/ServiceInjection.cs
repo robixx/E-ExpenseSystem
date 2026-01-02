@@ -17,6 +17,7 @@ namespace Expense.Infrastructure
 
             services.AddScoped<ICategory, CategoryService>();
             services.AddScoped<IUser, UserService>();
+            services.AddScoped<IAuth, AuthService>();
         }
     }
 }

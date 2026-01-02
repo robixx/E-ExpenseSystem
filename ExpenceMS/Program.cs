@@ -1,6 +1,6 @@
 
 using Expense.Infrastructure;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +11,23 @@ builder.Services.AddDbContext<DatabaseConnection>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.InjectServices();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(8); // session timeout
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "UserAuthCookie";
+        options.LoginPath = "/Home/Index"; // redirect to login page
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,12 +40,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseSession(); // enable session
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapStaticAssets();
-
-
 // Fallback route for non-area controllers (if needed)
 app.MapControllerRoute(
             name: "areas",
@@ -38,9 +53,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
- 
-
-
-
 
 app.Run();

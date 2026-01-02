@@ -17,7 +17,12 @@
 </div><!-- End Page Title -->
 <div class="col-12">
     <div class="card recent-sales overflow-auto">
-
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["message"]
+            </div>
+        }
         <div class="card-body">
             <h5 class="card-title">Recent User <span>| </span> <a class="btn btn-primary btn-sm" href="@Url.Action("AddUser", "Security", new { Area = "Admin" })"><i class="bi bi-plus"></i> Add New User</a> </h5>
 
@@ -52,8 +57,18 @@
                             <td>@item.UserName</td>
                             <td>@item.UserEmail</td>
                             <td>@item.UserPhone</td>
-                            <td><span class="badge bg-success">Active</span></td>
-                            <td></td>
+                            <td>
+                                @{
+                                    var status = item.IsActive == "1" ? "Active" : "In-active";
+                                    var color = item.IsActive == "1" ? "bg-success" : "bg-danger";
+                                }
+                               
+                                <span class="badge @color">@status</span>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditUser", "Security", new { area = "Admin", id = item.UserId })"><i class="bi bi-pencil"></i></a>
+                                <a href="@Url.Action("DeleteUser", "Security", new { area = "Admin", id = item.UserId })"><i class="bi bi-trash"></i></a>
+                            </td>
                         </tr>
                         i++;
                     }

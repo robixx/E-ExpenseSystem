@@ -35,6 +35,24 @@
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
     <style>
+        .sidebar-nav .nav-links {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #012970;
+            background: #fff;
+            transition: 0.3;           
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+        .nav-links{
+            text-decoration: none;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+        }
+        .nav-links i{
+            margin-right:10px;
+        }
         
     </style>
 </head>
@@ -46,6 +64,10 @@
         var area = ViewContext.RouteData.Values["area"]?.ToString();
         var controller = ViewContext.RouteData.Values["controller"]?.ToString();
         var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+        var username = User.Identity?.Name ?? "Admin";
+        var userImage = User.FindFirst("UserImage")?.Value ?? "/images/default.png";
+
     }
 
     <!-- ======= Header ======= -->
@@ -219,14 +241,21 @@
                 <li class="nav-item dropdown pe-3">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="~/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+
+                        @if (!string.IsNullOrEmpty(userImage))
+                        {
+                            <img src="@Url.Action("Image", "Dashboard", new { area = "Admin", fileName = userImage })"
+                                 alt="Profile" style="width:40px; height:40px; object-fit:cover; border-radius:50%;" />
+                        }                       
+
+                       
+                        <span class="d-none d-md-block dropdown-toggle ps-2">@username</span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>Kevin Anderson</h6>
-                            <span>Web Designer</span>
+                            <h6>@username</h6>
+                            <span>Software Engineer</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
@@ -263,7 +292,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="@Url.Action("Logout", "Dashboard", new { area = "Admin" })">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>
@@ -282,9 +311,9 @@
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link @(area == "Admin" && controller == "Dashboard" && action == "Index" ? "active" : "") " href="@Url.Action("Index", "Dashboard", new { Area = "Admin" })">
+                <a class="@(area == "Admin" && controller == "Dashboard" && action == "Index" ? "nav-link" : "nav-links") " href="@Url.Action("Index", "Dashboard", new { Area = "Admin" })">
                     <i class="bi bi-grid"></i>
-                    <span>Dashboard</span>
+                    <span>Dashboard</span> 
                 </a>
             </li><!-- End Dashboard Nav -->
 

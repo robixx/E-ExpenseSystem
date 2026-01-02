@@ -1,5 +1,6 @@
 ﻿using Expense.Application.Interface;
 using Expense.Application.ModelViews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 namespace ExpenceMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class SecurityController : Controller
     {
         private readonly IUser _user;
@@ -52,6 +54,7 @@ namespace ExpenceMS.Areas.Admin.Controllers
         public async Task<IActionResult> AddUser( UserDto model, IFormFile image)
         {
             var userlist = await _user.AddUserAsync(model, image);
+            TempData["message"] = userlist.Message;
 
             return RedirectToAction("UserList");
         }

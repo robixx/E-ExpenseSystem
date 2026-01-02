@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Expense.Application.ModelViews.LoginViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,12 +9,19 @@
         <h3>Welcome to EMS</h3>
     </div>
     <div class="card-body">
-        <form>
+
+        @if (@TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+        <form asp-action="Login" asp-controller="Home" method="post"> 
             <div class="form-group">
                 <label for="username" class="form-label">Username</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                    <input type="text" class="form-control" id="username" asp-for="@Model.LoginName" placeholder="Enter your username" required>
                 </div>
             </div>
 
@@ -20,7 +29,7 @@
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                    <input type="password" class="form-control" id="password" asp-for="@Model.Password" placeholder="Enter your password" required>
                 </div>
             </div>
 
@@ -41,7 +50,7 @@
 </div>
 
 
-<script>
+@* <script>
     // Add some interactive functionality
     document.querySelector('form').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -77,4 +86,4 @@
             this.style.transform = 'translateY(0)';
         });
     });
-</script>
+</script> *@
