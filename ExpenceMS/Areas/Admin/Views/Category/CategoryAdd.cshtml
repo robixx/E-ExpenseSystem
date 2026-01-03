@@ -1,0 +1,46 @@
+﻿@model Expense.Application.ModelViews.CategoryDto
+
+@{
+    ViewData["Title"] = "Category Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
+}
+
+<div class="pagetitle">
+    <h1>Category</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Category</a></li>
+            <li class="breadcrumb-item active">Category Create</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+<div class="card shadow-sm">
+    <form asp-action="CategoryAdd" asp-controller="Category" asp-area="Admin" method="post" enctype="multipart/form-data">
+        <div class="row g-0">
+            <div class="col-md-12">
+                <div class="card-body">
+                    <div class="card-title text-center">  <h5 class="mb-4">Category Create</h5><hr /></div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Category Name</label>
+                            @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control", placeholder = "Enter Category Name", required = "required" })
+                        </div>
+                        <div class="col-md-2 form-check" style="margin-top:30px; margin-right:2px;">
+                            @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input", id = "IsActive" })
+                            <label class="form-check-label" for="IsActive">Is Active</label>
+                        </div>
+                        <!-- Last Name -->
+                        <div class="col-md-6">
+                            <label class="form-label">Descreiption</label>
+                            @Html.TextAreaFor(m => m.CategoryDescription, new { @class = "form-control", placeholder = "write some things", type = "text" })
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-12 text-center mt-2 mb-2">
+                <button class="btn btn-primary px-4" type="submit">Save Changes</button>
+            </div>
+        </div>
+    </form>
+</div>

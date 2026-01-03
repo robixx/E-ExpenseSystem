@@ -1,0 +1,72 @@
+﻿@model List<Expense.Application.ModelViews.CategoryDto>
+
+@{
+    ViewData["Title"] = "Category List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
+}
+
+<div class="pagetitle">
+    <h1>Category</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Category</a></li>
+            <li class="breadcrumb-item active">Category List</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<div class="col-12">
+    <div class="card recent-sales overflow-auto">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["message"]
+            </div>
+        }
+        <div class="card-body">
+            <h5 class="card-title">Recent Category <span>| </span> <a class="btn btn-primary btn-sm" href="@Url.Action("CategoryAdd", "Category", new { Area = "Admin" })"><i class="bi bi-plus"></i> Add New User</a> </h5>
+
+            <table class="table table-borderless datatable">
+                <thead style="font-size:15px;">
+                    <tr>
+                        <th>#</th>                       
+                        <th>Name</th>
+                        <th>Description</th>                        
+                        <th>CreateDate</th>                        
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row">@i</th>
+                           
+                            <td>@item.CategoryName</td>
+                            <td>@item.CategoryDescription</td>
+                            <td>@item.CreateDate.ToString("dd-MMM-yyyy")</td>
+                            <td>
+                                @{
+                                    var status = item.IsActive == true ? "Active" : "In-active";
+                                    var color = item.IsActive == true ? "bg-success" : "bg-danger";
+                                }
+
+                                <span class="badge @color">@status</span>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditCategory", "Category", new { area = "Admin", id = item.CategoryId })"><i class="bi bi-pencil"></i></a>
+                                <a href="@Url.Action("DeleteCategory", "Category", new { area = "Admin", id = item.CategoryId })"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div><!-- End Recent Sales -->

@@ -1,0 +1,111 @@
+﻿@model Expense.Application.ModelViews.ExpenseValueDto
+
+@{
+    ViewData["Title"] = "Expense List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
+}
+
+<div class="pagetitle">
+    <h1>Expense</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Expense</a></li>
+            <li class="breadcrumb-item active">Expense List</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<div class="col-12">
+    <div class="card recent-sales overflow-auto">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["message"]
+            </div>
+        }
+        <div class="card-body">
+            <h5 class="card-title">
+                Recent Expense <span>| </span>
+                <button type="button"
+                        class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addExpenseModal">
+                    <i class="bi bi-plus"></i>
+                    Add Expense
+                </button>
+
+            </h5>
+
+            <table class="table table-borderless datatable">
+                <thead style="font-size:15px;">
+                    <tr>
+                        <th>#</th>
+                        <th>Purpose</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>TotalAmount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div><!-- End Recent Sales -->
+
+        <!--Modal Open -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-top modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Expense</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- FORM CONTENT -->
+                <form id="expenseForm" method="post"
+                      asp-action="ExpenseAdd"
+                      asp-controller="Expense"
+                      asp-area="Admin">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Category</label>
+                            @Html.DropDownList("CategoryId",ViewBag.Category as SelectList," Select Category ",new { @class = "form-select", required = "required" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Expense Date</label>
+                            @Html.TextBoxFor(m => m.ExpenseDate, new { @class = "form-control", type = "date"})
+                           
+                        </div>
+                       
+                        <div class="col-md-6">
+                            <label class="form-label">Price</label>
+                            @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number"})
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Description</label>
+                            @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" form="expenseForm">Save</button>
+                    </div>
+                </form>
+            </div>
+
+            
+
+        </div>
+    </div>
+</div>
