@@ -17,5 +17,6 @@ namespace Expense.Domain.Entity
         public DateTime CreateDate { get; set; } = DateTime.Now;      
         public string? Description { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public int CreatedBy { get; set; }
     }
 }

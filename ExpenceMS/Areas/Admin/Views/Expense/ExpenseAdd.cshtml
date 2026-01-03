@@ -42,14 +42,30 @@
                     <tr>
                         <th>#</th>
                         <th>Purpose</th>
-                        <th>Category</th>
-                        <th>Quantity</th>
+                        <th>Category</th>                       
                         <th>Price</th>
                         <th>TotalAmount</th>
+                        <th>ExpenseDate</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach (var item in ViewBag.expense)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Description</td>
+                            <td>@item.CategoryName</td>
+                            <td>@item.Price</td>
+                            <td>@item.TotalAmount</td>
+                            <td>@item.ExpenseDate.ToString("dd-MMM-yyyy")</td>
+                            <td>
+                                <a href="@Url.Action("EditCategory", "Category", new { area = "Admin", id = item.ExpenseId })"><i class="bi bi-pencil"></i></a>
+                                <a href="@Url.Action("DeleteCategory", "Category", new { area = "Admin", id = item.ExpenseId })"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
                 </tbody>
             </table>
 
@@ -88,7 +104,7 @@
                         </div>
                        
                         <div class="col-md-6">
-                            <label class="form-label">Price</label>
+                            <label class="form-label">Amount</label>
                             @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number"})
                         </div>
 

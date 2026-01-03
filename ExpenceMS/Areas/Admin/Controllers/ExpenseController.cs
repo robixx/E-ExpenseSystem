@@ -23,10 +23,14 @@ namespace ExpenceMS.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> ExpenseAdd()
         {
-
+            var userIdClaim = User.FindFirst("UserId");
+            if (userIdClaim == null)
+                return Unauthorized();
+            int userId= int.Parse(userIdClaim.Value);
             var categories = await _dropdown.getCategoryAsync();
             ViewBag.Category = new SelectList(categories, "Id", "Name");
-
+            var data = await _expense.GetExpenseAysnc(userId);
+            ViewBag.expense = data.list;
             return View();
         }
 
@@ -34,11 +38,14 @@ namespace ExpenceMS.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ExpenseAdd(ExpenseValueDto expense)
         {
-
+            var userIdClaim = User.FindFirst("UserId");
+            if (userIdClaim == null)
+                return Unauthorized();
+            int userId = int.Parse(userIdClaim.Value);
             var categories = await _dropdown.getCategoryAsync();
             ViewBag.Category = new SelectList(categories, "Id", "Name");
 
-            var result= await _expense.ExpenseAysnc(expense);
+            var result= await _expense.ExpenseAysnc(expense, userId);
 
             if (result.Status)
             {
