@@ -20,6 +20,8 @@ namespace Expense.Infrastructure
             services.AddScoped<IAuth, AuthService>();
             services.AddScoped<IDropdown, DropdownService>();
             services.AddScoped<IExpense, ExpenseService>();
+            services.AddScoped<IIncome, IncomeService>();
+            services.AddScoped<IExpenseDashboardService, ExpenseDashboardService>();
         }
     }
 }

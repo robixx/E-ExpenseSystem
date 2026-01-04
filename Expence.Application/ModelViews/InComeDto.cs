@@ -11,7 +11,7 @@ namespace Expense.Application.ModelViews
         public string IncomeName { get; set; } = string.Empty;
         public decimal TotalAmount { get; set; }
         public int IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreateDate { get; set; }
+        public int CreatedBy { get; set; }        
+        public DateTime MonthOfIncome { get; set; }
     }
 }

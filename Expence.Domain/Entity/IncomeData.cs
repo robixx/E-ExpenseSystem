@@ -20,13 +20,3 @@ namespace Expense.Domain.Entity
 }
 
 
-//CREATE TABLE IncomeData
-//(
-//    IncomeId INT IDENTITY(1,1) PRIMARY KEY,
-//    IncomeName NVARCHAR(200) NOT NULL,
-//    TotalAmount DECIMAL(18,2) NOT NULL,
-//    IsActive INT NOT NULL,
-//    CreatedBy INT NOT NULL,
-//    CreateDate DATETIME NOT NULL DEFAULT GETDATE(),
-//   MonthOfIncome smalldatetime
-//);

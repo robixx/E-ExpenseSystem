@@ -68,7 +68,7 @@ namespace Expense.Infrastructure.Service
                                  CategoryName = c.CategoryName, 
                                  CreateBy=b.CreatedBy
                              }
-                         ).Where(i=>i.CreateBy==userId).ToListAsync();
+                         ).Where(i=>i.CreateBy==userId).OrderByDescending(i=>i.ExpenseDate).ToListAsync();
 
                 return ("Data Retrived Successfuly", true, exlist);
             }

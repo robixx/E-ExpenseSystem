@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ExpenceMS.Areas.Admin.Controllers
 {
@@ -12,16 +13,26 @@ namespace ExpenceMS.Areas.Admin.Controllers
     {
 
         private readonly string _imagePath;
-        public DashboardController( IConfiguration configuration)
+        private readonly IExpenseDashboardService _expenseDashboardService;
+        public DashboardController( IConfiguration configuration, IExpenseDashboardService expenseDashboardService)
         {
          
             _imagePath = configuration["ImageStorage:TokenImagePath"]
                     ?? throw new ArgumentNullException("ImageStorage:TokenImagePath not configured");
+            _expenseDashboardService = expenseDashboardService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+
+            var userIdClaim = User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int userId= int.Parse(userIdClaim.Value);
+            var list = await _expenseDashboardService.GetExpenseIncomeSummaryAsync(userId);
+            return View(list);
         }
 
         [HttpGet("Admin/Dashboard/Image/{fileName}")]

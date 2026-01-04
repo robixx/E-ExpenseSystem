@@ -340,7 +340,7 @@
                 <ul id="tables-nav" class="nav-content collapse @(controller == "Expense" ? "show" : "") " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="@Url.Action("ExpenseAdd", "Expense", new { Area = "Admin" }) " class="@(area == "Admin" && controller == "Expense" && action == "ExpenseAdd" ? "active" : "")">
-                            <i class="bi bi-circle"></i><span>Add</span>
+                            <i class="bi bi-circle"></i><span>Add Expense</span>
                         </a>
                        
                     </li>
@@ -348,25 +348,20 @@
                 </ul>
             </li><!-- End Icons Nav -->
 
-            @* <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+             <li class="nav-item">
+                <a class="nav-link @(controller == "Earning" ? "" : "collapsed")" data-bs-target="#balance-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-currency-dollar"></i><span>Income</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <ul id="balance-nav" class="nav-content collapse @(controller == "Earning" ? "show" : "")  " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="tables-general.html">
-                            <i class="bi bi-circle"></i><span>General Tables</span>
+                        <a href="@Url.Action("IncomeList", "Earning", new { Area = "Admin" }) " class="@(area == "Admin" && controller == "Earning" && action == "IncomeList" ? "active" : "")">
+                            <i class="bi bi-circle"></i><span>Add Income</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="tables-data.html">
-                            <i class="bi bi-circle"></i><span>Data Tables</span>
-                        </a>
-                    </li>
+                   
                 </ul>
             </li><!-- End Tables Nav -->
-
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>

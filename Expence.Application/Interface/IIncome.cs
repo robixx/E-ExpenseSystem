@@ -8,6 +8,6 @@ namespace Expense.Application.Interface
     public interface IIncome
     {
         Task<(string Message, bool Status, List<InComeDto> incomelist)> GetIncomeAysnc(int userId);
-        Task<(string Message, bool Status)> SaveIncomeAysnc(InComeDto income ,int userId);
+        Task<(string Message, bool Status)> SaveIncomeAysnc(InComeDto income);
     }
 }
