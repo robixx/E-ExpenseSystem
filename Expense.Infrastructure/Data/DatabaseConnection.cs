@@ -16,6 +16,7 @@ namespace Expense.Infrastructure
         public DbSet<User> Users { get; set; }
         public DbSet<ExpenseData> ExpenseData {  get; set; }
         public DbSet<UserCredential> UserCredential {  get; set; }
+        public DbSet<IncomeData> IncomeData {  get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,6 +26,7 @@ namespace Expense.Infrastructure
             modelBuilder.Entity<User>().HasKey(i => i.UserId);
             modelBuilder.Entity<ExpenseData>().HasKey(i => i.ExpenseId);
             modelBuilder.Entity<UserCredential>().HasKey(i => i.Id);
+            modelBuilder.Entity<IncomeData>().HasKey(i => i.IncomeId);
             //modelBuilder.Entity<MenuSetUp>().HasNoKey();
             base.OnModelCreating(modelBuilder);
         }
