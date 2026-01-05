@@ -1,5 +1,6 @@
 
 using Expense.Infrastructure;
+using Expense.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DatabaseConnection>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<ActivityLogFilter>();
+});
+builder.Services.AddHttpContextAccessor();
 builder.Services.InjectServices();
 builder.Services.AddSession(options =>
 {

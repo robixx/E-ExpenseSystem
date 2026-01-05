@@ -22,6 +22,8 @@ namespace Expense.Infrastructure
             services.AddScoped<IExpense, ExpenseService>();
             services.AddScoped<IIncome, IncomeService>();
             services.AddScoped<IExpenseDashboardService, ExpenseDashboardService>();
+            services.AddScoped<IActivityLogService, ActivityLogService>();
+            services.AddScoped<ActivityLogFilter>();
         }
     }
 }

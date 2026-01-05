@@ -17,6 +17,62 @@ namespace Expense.Infrastructure.Service
             _context = connection;
         }
 
+        public async Task<List<ActivityLogDto>> GetActivityLogSummaryAsync()
+        {
+            try
+            {
+
+
+                var list = await _context.ActivityLog
+                    .OrderByDescending(x => x.CreatedAt)
+                    .Take(10)
+                    .Select(i => new ActivityLogDto
+                    {
+                        Id = i.Id,
+                        UserId = i.UserId,
+                        UserName = i.UserName,
+                        Description = i.Description,
+                        CreatedAt = i.CreatedAt
+                        // DO NOT COMPUTE TIMEAGO HERE
+                    })
+                    .ToListAsync();
+
+                // Compute TimeAgo in memory
+                list.ForEach(x => x.TimeAgo = GetTimeAgo(x.CreatedAt));
+                return list;
+
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        private string GetTimeAgo(DateTime dateTime)
+        {
+            var timeSpan = DateTime.Now - dateTime;
+
+            if (timeSpan.TotalSeconds < 60)
+                return "just now";
+
+            if (timeSpan.TotalMinutes < 60)
+                return $"{(int)timeSpan.TotalMinutes} min ago";
+
+            if (timeSpan.TotalHours < 24)
+                return $"{(int)timeSpan.TotalHours} hrs";
+
+            if (timeSpan.TotalDays < 7)
+                return $"{(int)timeSpan.TotalDays} day";
+
+            if (timeSpan.TotalDays < 30)
+                return $"{(int)(timeSpan.TotalDays / 7)} week";
+
+            return dateTime.ToString("dd MMM yyyy");
+        }
+
         public async Task<ExpenseIncomeSummaryVm> GetExpenseIncomeSummaryAsync(int userId)
         {
             try

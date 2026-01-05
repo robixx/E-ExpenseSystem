@@ -1,4 +1,5 @@
-﻿using Expense.Domain.Entity;
+﻿using Expense.Application.ModelViews;
+using Expense.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -17,6 +18,7 @@ namespace Expense.Infrastructure
         public DbSet<ExpenseData> ExpenseData {  get; set; }
         public DbSet<UserCredential> UserCredential {  get; set; }
         public DbSet<IncomeData> IncomeData {  get; set; }
+        public DbSet<ActivityLog> ActivityLog {  get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +29,7 @@ namespace Expense.Infrastructure
             modelBuilder.Entity<ExpenseData>().HasKey(i => i.ExpenseId);
             modelBuilder.Entity<UserCredential>().HasKey(i => i.Id);
             modelBuilder.Entity<IncomeData>().HasKey(i => i.IncomeId);
+            modelBuilder.Entity<ActivityLog>().HasKey(i => i.Id);
             //modelBuilder.Entity<MenuSetUp>().HasNoKey();
             base.OnModelCreating(modelBuilder);
         }

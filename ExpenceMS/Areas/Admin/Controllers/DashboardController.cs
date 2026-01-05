@@ -32,6 +32,7 @@ namespace ExpenceMS.Areas.Admin.Controllers
 
             int userId= int.Parse(userIdClaim.Value);
             var list = await _expenseDashboardService.GetExpenseIncomeSummaryAsync(userId);
+            ViewBag.logdata = await _expenseDashboardService.GetActivityLogSummaryAsync();
             return View(list);
         }
 
