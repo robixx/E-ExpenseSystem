@@ -1,9 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Expense.Application.ModelViews.BackupMoneyDto
+
 @{
     ViewData["Title"] = "Money Management";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
 }
 
 <div class="pagetitle">
@@ -25,19 +25,103 @@
         }
         <div class="card-body">
             <h5 class="card-title">
-                Recent Earning <span>| </span>
+                Recent Savings <span>| </span>
                 <button type="button"
                         class="btn btn-primary btn-sm"
                         data-bs-toggle="modal"
                         data-bs-target="#addEarningModal">
                     <i class="bi bi-plus"></i>
-                    Add Income
+                    Add Saving
                 </button>
             </h5>
 
-           
+            <table class="table table-borderless datatable">
+                <thead style="font-size:15px;">
+                    <tr>
+                        <th>#</th>
+                        <th>Purpose</th>
+                        <th>For Month</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in ViewBag.saveMoney)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.PurposeName</td>
+                            <td>@item.MonthofDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.Amount</td>
+                            <td>
+                                @{
+                                    var status = item.IsActive == 1 ? "Active" : "In-active";
+                                    var color = item.IsActive == 1 ? "bg-success" : "bg-danger";
+                                }
+
+                                <span class="badge @color">@status</span>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditCategory", "Category", new { area = "Admin", id = item.IncomeId })"><i class="bi bi-pencil"></i></a>
+                                <a href="@Url.Action("DeleteCategory", "Category", new { area = "Admin", id = item.IncomeId })"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
 
         </div>
 
     </div>
 </div><!-- End Recent Sales -->
+
+
+<!--Modal-->
+<div class="modal fade" id="addEarningModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-top modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Money Saving</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- FORM CONTENT -->
+                <form id="earningForm" method="post"
+                      asp-action="BackUpMoney"
+                      asp-controller="Earning"
+                      asp-area="Admin">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Purpose</label>
+                            @Html.TextBoxFor(m => m.PurposeName, new { @class = "form-control", type = "text", required = "required" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Month Name</label>
+                            @Html.TextBoxFor(m => m.MonthofDate, new { @class = "form-control", type = "date" })
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Amount</label>
+                            @Html.DropDownList("IncomeId", ViewBag.Category as SelectList, " Select Income ", new { @class = "form-select", required = "required" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Amount</label>
+                            @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", type = "number" })
+                        </div>
+
+                    </div>
+                    
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" form="earningForm">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

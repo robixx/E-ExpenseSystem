@@ -9,5 +9,7 @@ namespace Expense.Application.Interface
     {
         Task<(string Message, bool Status, List<InComeDto> incomelist)> GetIncomeAysnc(int userId);
         Task<(string Message, bool Status)> SaveIncomeAysnc(InComeDto income);
+        Task<(string Message, bool Status)> BackIncomeAysnc(BackupMoneyDto model);
+        Task<(string Message, bool Status,List<BackupMoneyDto>list)> GetBackIncomeAysnc(int userId);
     }
 }

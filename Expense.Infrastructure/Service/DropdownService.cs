@@ -33,5 +33,25 @@ namespace Expense.Infrastructure.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<Dropdown>> getIncomeAsync()
+        {
+            try
+            {
+                var category = await _connection.IncomeData.Where(i => i.IsActive == 1)
+                    .Select(c => new Dropdown
+                    {
+                        Id = c.IncomeId,
+                        Name = c.IncomeName
+                    }).ToListAsync();
+
+                return category;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

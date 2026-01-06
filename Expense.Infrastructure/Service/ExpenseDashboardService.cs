@@ -101,10 +101,14 @@ namespace Expense.Infrastructure.Service
                              && x.MonthOfIncome >= startOfMonth)
                     .SumAsync(x => x.TotalAmount);
 
-                var yearlyIncome = await _context.IncomeData
-                    .Where(x => x.CreatedBy == userId
-                             && x.MonthOfIncome >= startOfYear)
-                    .SumAsync(x => x.TotalAmount);
+                var netYearlyIncome = await (
+                          from income in _context.IncomeData
+                          where income.CreatedBy == userId
+                             && income.MonthOfIncome >= startOfYear
+                          join backup in _context.BackupMoney
+                              on income.IncomeId equals backup.IncomeId into backupGroup
+                          select income.TotalAmount - backupGroup.Sum(b => (decimal?)b.Amount) ?? income.TotalAmount
+                      ).SumAsync();
 
                 return new ExpenseIncomeSummaryVm
                 {
@@ -113,10 +117,10 @@ namespace Expense.Infrastructure.Service
                     YearlyExpense = yearlyExpense,
 
                     MonthlyIncome = monthlyIncome,
-                    YearlyIncome = yearlyIncome,
+                    YearlyIncome = netYearlyIncome,
 
                     MonthlyNetBalance = monthlyIncome - monthlyExpense,
-                    YearlyNetBalance = yearlyIncome - yearlyExpense
+                    YearlyNetBalance = netYearlyIncome - yearlyExpense
                 };
 
             }
