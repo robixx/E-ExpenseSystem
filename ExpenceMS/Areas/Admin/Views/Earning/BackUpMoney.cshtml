@@ -15,3 +15,29 @@
         </ol>
     </nav>
 </div><!-- End Page Title -->
+<div class="col-12">
+    <div class="card recent-sales overflow-auto">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["message"]
+            </div>
+        }
+        <div class="card-body">
+            <h5 class="card-title">
+                Recent Earning <span>| </span>
+                <button type="button"
+                        class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addEarningModal">
+                    <i class="bi bi-plus"></i>
+                    Add Income
+                </button>
+            </h5>
+
+           
+
+        </div>
+
+    </div>
+</div><!-- End Recent Sales -->
