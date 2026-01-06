@@ -51,5 +51,12 @@ namespace ExpenceMS.Areas.Admin.Controllers
 
             return RedirectToAction("IncomeList");
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> BackUpMoney()
+        {
+            return View();  
+        }
     }
 }

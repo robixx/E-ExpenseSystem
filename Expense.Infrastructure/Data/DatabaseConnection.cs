@@ -19,6 +19,7 @@ namespace Expense.Infrastructure
         public DbSet<UserCredential> UserCredential {  get; set; }
         public DbSet<IncomeData> IncomeData {  get; set; }
         public DbSet<ActivityLog> ActivityLog {  get; set; }
+        public DbSet<BackupMoney> BackupMoney {  get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,6 +31,7 @@ namespace Expense.Infrastructure
             modelBuilder.Entity<UserCredential>().HasKey(i => i.Id);
             modelBuilder.Entity<IncomeData>().HasKey(i => i.IncomeId);
             modelBuilder.Entity<ActivityLog>().HasKey(i => i.Id);
+            modelBuilder.Entity<BackupMoney>().HasKey(i => i.BackupId);
             //modelBuilder.Entity<MenuSetUp>().HasNoKey();
             base.OnModelCreating(modelBuilder);
         }
