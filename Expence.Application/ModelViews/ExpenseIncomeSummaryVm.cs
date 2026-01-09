@@ -13,7 +13,7 @@ namespace Expense.Application.ModelViews
         public decimal MonthlyIncome { get; set; }
         public decimal YearlyIncome { get; set; }
 
-        public decimal MonthlyNetBalance { get; set; }
+        public decimal SaveNetBalance { get; set; }
         public decimal YearlyNetBalance { get; set; }
     }
 }

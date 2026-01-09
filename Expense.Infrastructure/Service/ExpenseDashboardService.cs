@@ -100,6 +100,9 @@ namespace Expense.Infrastructure.Service
                     .Where(x => x.CreatedBy == userId
                              && x.MonthOfIncome >= startOfMonth)
                     .SumAsync(x => x.TotalAmount);
+                var saveIncome = await _context.BackupMoney
+                    .Where(x => x.CreatedBy == userId)
+                    .SumAsync(x => x.Amount);
 
                 var netYearlyIncome = await (
                           from income in _context.IncomeData
@@ -119,7 +122,7 @@ namespace Expense.Infrastructure.Service
                     MonthlyIncome = monthlyIncome,
                     YearlyIncome = netYearlyIncome,
 
-                    MonthlyNetBalance = monthlyIncome - monthlyExpense,
+                    SaveNetBalance = saveIncome,
                     YearlyNetBalance = netYearlyIncome - yearlyExpense
                 };
 
