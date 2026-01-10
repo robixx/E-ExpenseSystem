@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "ToDo List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .card-title {
+        padding: 7px 0 0px 0;
+    }
+</style>
+
+<div class="pagetitle">
+    <h1>Daily Work List </h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Todo List</a></li>
+            <li class="breadcrumb-item active">Work </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+
+<section class="section dashboard">
+    <div class="row">
+        <div class="col-md-12 card">
+            <div class="card-body">
+                <div class="card-title text-center">Todo List</div><hr />
+                <form method="post" asp-action="Index" asp-controller="Work" asp-area="Admin">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <input type="text" id="taskInput" class="form-control" placeholder="Add new task…" required>
+                        </div>
+                        <div class="col-md-2 d-grid">
+                            <button type="submit" class="btn btn-primary">Add New</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
