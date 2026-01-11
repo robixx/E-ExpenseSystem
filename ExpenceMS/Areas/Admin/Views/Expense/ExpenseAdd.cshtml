@@ -36,7 +36,12 @@
                 </button>
 
             </h5>
-
+            @if (TempData["message"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["message"]
+                </div>
+            }
             <table class="table table-borderless datatable">
                 <thead style="font-size:15px;">
                     <tr>

@@ -44,11 +44,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
 app.UseSession(); // enable session
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapStaticAssets();
+
 // Fallback route for non-area controllers (if needed)
 app.MapControllerRoute(
             name: "areas",
@@ -56,7 +57,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+    
 
 app.Run();

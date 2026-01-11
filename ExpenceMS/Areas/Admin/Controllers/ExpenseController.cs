@@ -49,6 +49,7 @@ namespace ExpenceMS.Areas.Admin.Controllers
 
             if (result.Status)
             {
+                TempData["message"] = result.Message;
                 return RedirectToAction("ExpenseAdd");
             }
 
