@@ -1,0 +1,617 @@
+﻿@{
+    ViewData["Title"] = "ToDo List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+   
+}
+<style>
+    :root {
+        --jira-blue: #012970;
+        --jira-blue-light: #4C9AFF;
+        --jira-blue-dark: #0747A6;
+        --jira-gray: #6B778C;
+        --jira-gray-light: #F4F5F7;
+        --jira-gray-dark: #172B4D;
+        --jira-border: #DFE1E6;
+        --jira-success: #00875A;
+        --jira-warning: #FFAB00;
+        --jira-danger: #DE350B;
+    }
+
+    /* Header Styles */
+    .jira-header {
+        background-color: var(--jira-blue);
+        color: white;
+        padding: 0.75rem 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+        .jira-header .navbar-brand {
+            color: white;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .jira-header .nav-link {
+            color: rgba(255,255,255,0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+            .jira-header .nav-link:hover {
+                color: white;
+                background-color: rgba(255,255,255,0.1);
+            }
+
+    /* Sidebar Styles */
+    .jira-sidebar {
+        background-color: white;
+        border-right: 1px solid var(--jira-border);
+        min-height: calc(100vh - 60px);
+        padding: 1.5rem 0;
+    }
+
+    .sidebar-item {
+        padding: 0.75rem 1.5rem;
+        color: var(--jira-gray-dark);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+
+        .sidebar-item:hover {
+            background-color: var(--jira-gray-light);
+            color: var(--jira-blue);
+        }
+
+        .sidebar-item.active {
+            background-color: #E6F2FF;
+            color: var(--jira-blue);
+            border-left-color: var(--jira-blue);
+        }
+
+    /* Main Content */
+    .main-content {
+        padding: 2rem;
+    }
+
+    /* Board Header */
+    .board-header {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .board-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--jira-gray-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .board-filters {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        background-color: white;
+        border: 1px solid var(--jira-border);
+        color: var(--jira-gray-dark);
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+        .filter-btn:hover {
+            background-color: var(--jira-gray-light);
+            border-color: var(--jira-blue);
+        }
+
+        .filter-btn.active {
+            background-color: var(--jira-blue);
+            color: white;
+            border-color: var(--jira-blue);
+        }
+
+    /* Kanban Board */
+    .kanban-board {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+    }
+
+    .kanban-column {
+        background-color: white;
+        border-radius: 8px;
+        min-width: 509px;
+        max-width: 450px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .column-header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--jira-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .column-title {
+        font-weight: 600;
+        color: var(--jira-gray-dark);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .task-count {
+        background-color: var(--jira-gray-light);
+        color: var(--jira-gray);
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .column-content {
+        padding: 1rem;
+        min-height: 400px;
+    }
+
+    /* Task Cards */
+    .task-card {
+        background-color: white;
+        border: 1px solid var(--jira-border);
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+    }
+
+        .task-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+
+    .task-priority {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        border-radius: 6px 0 0 6px;
+    }
+
+    .priority-high {
+        background-color: var(--jira-danger);
+    }
+
+    .priority-medium {
+        background-color: var(--jira-warning);
+    }
+
+    .priority-low {
+        background-color: var(--jira-success);
+    }
+
+    .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+        padding-left: 0.5rem;
+    }
+
+    .task-type {
+        font-size: 0.75rem;
+        color: var(--jira-gray);
+        background-color: var(--jira-gray-light);
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+    }
+
+    .task-title {
+        font-weight: 500;
+        color: var(--jira-gray-dark);
+        margin-bottom: 0.5rem;
+        padding-left: 0.5rem;
+    }
+
+    .task-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 0.5rem;
+    }
+
+    .task-assignee {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: var(--jira-blue);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .task-due-date {
+        font-size: 0.75rem;
+        color: var(--jira-gray);
+    }
+
+    /* Add Task Button */
+    .add-task-btn {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px dashed var(--jira-border);
+        background-color: transparent;
+        color: var(--jira-gray);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+        .add-task-btn:hover {
+            border-color: var(--jira-blue);
+            color: var(--jira-blue);
+            background-color: #F4F9FF;
+        }
+
+    /* Modal Styles */
+    .modal-header {
+        background-color: var(--jira-gray-light);
+        border-bottom: 1px solid var(--jira-border);
+    }
+
+    .modal-title {
+        color: var(--jira-gray-dark);
+        font-weight: 600;
+    }
+
+    /* Responsive Design */
+   
+</style>
+<div class="pagetitle">
+    <h1>Daily Work List </h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Todo List</a></li>
+            <li class="breadcrumb-item active">Work </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+<div class="section">
+    <div class="row">       
+        <!-- Main Content -->
+        <div class="col-md-12 col-lg-12 p-0">            
+                <!-- Board Header -->
+                <div class="board-header">
+                    <h1 class="board-title">My Todo Board</h1>
+                    <div class="board-filters">
+                        <button class="filter-btn active">All Tasks</button>
+                        <button class="filter-btn">High Priority</button>
+                        <button class="filter-btn">This Week</button>
+                        <button class="filter-btn">Assigned to Me</button>
+                        <div class="ms-auto">
+                            <button class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-search me-1"></i>Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="kanban-board">
+                    <!-- To Do Column -->
+                    <div class="kanban-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <i class="fas fa-circle" style="color: #6B778C;"></i>
+                                To Do
+                            </div>
+                            <span class="task-count">3</span>
+                        </div>
+                        <div class="column-content">
+                            <div class="task-card" onclick="openTaskModal('task1')">
+                                <div class="task-priority priority-high"></div>
+                                <div class="task-header">
+                                    <span class="task-type">Task</span>
+                                </div>
+                                <div class="task-title">Design new landing page</div>
+                                <div class="task-meta">
+                                    <div class="task-assignee">JD</div>
+                                    <span class="task-due-date">Due: Jan 25</span>
+                                </div>
+                            </div>
+
+                            <div class="task-card" onclick="openTaskModal('task2')">
+                                <div class="task-priority priority-medium"></div>
+                                <div class="task-header">
+                                    <span class="task-type">Bug</span>
+                                </div>
+                                <div class="task-title">Fix navigation menu on mobile</div>
+                                <div class="task-meta">
+                                    <div class="task-assignee">AB</div>
+                                    <span class="task-due-date">Due: Jan 22</span>
+                                </div>
+                            </div>
+
+                            <div class="task-card" onclick="openTaskModal('task3')">
+                                <div class="task-priority priority-low"></div>
+                                <div class="task-header">
+                                    <span class="task-type">Feature</span>
+                                </div>
+                                <div class="task-title">Add dark mode support</div>
+                                <div class="task-meta">
+                                    <div class="task-assignee">CD</div>
+                                    <span class="task-due-date">Due: Jan 30</span>
+                                </div>
+                            </div>
+
+                            <button class="add-task-btn" onclick="addNewTask('todo')">
+                                <i class="fas fa-plus me-2"></i>Add a task
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- In Progress Column -->
+                    <div class="kanban-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <i class="fas fa-circle" style="color: #FFAB00;"></i>
+                                In Progress
+                            </div>
+                            <span class="task-count">2</span>
+                        </div>
+                        <div class="column-content">
+                            <div class="task-card" onclick="openTaskModal('task4')">
+                                <div class="task-priority priority-high"></div>
+                                <div class="task-header">
+                                    <span class="task-type">Task</span>
+                                </div>
+                                <div class="task-title">Implement user authentication</div>
+                                <div class="task-meta">
+                                    <div class="task-assignee">EF</div>
+                                    <span class="task-due-date">Due: Jan 20</span>
+                                </div>
+                            </div>
+
+                            <div class="task-card" onclick="openTaskModal('task5')">
+                                <div class="task-priority priority-medium"></div>
+                                <div class="task-header">
+                                    <span class="task-type">Feature</span>
+                                </div>
+                                <div class="task-title">Create dashboard analytics</div>
+                                <div class="task-meta">
+                                    <div class="task-assignee">GH</div>
+                                    <span class="task-due-date">Due: Jan 24</span>
+                                </div>
+                            </div>
+
+                            <button class="add-task-btn" onclick="addNewTask('progress')">
+                                <i class="fas fa-plus me-2"></i>Add a task
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Done Column -->
+                    <div class="kanban-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <i class="fas fa-circle" style="color: #00875A;"></i>
+                                Done
+                            </div>
+                            <span class="task-count">1</span>
+                        </div>
+                        <div class="column-content">
+                            <div class="task-card" onclick="openTaskModal('task6')">
+                                <div class="task-priority priority-low"></div>
+                                <div class="task-header">
+                                    <span class="task-type">Task</span>
+                                </div>
+                                <div class="task-title">Setup project repository</div>
+                                <div class="task-meta">
+                                    <div class="task-assignee">IJ</div>
+                                    <span class="task-due-date">Completed</span>
+                                </div>
+                            </div>
+
+                            <button class="add-task-btn" onclick="addNewTask('done')">
+                                <i class="fas fa-plus me-2"></i>Add a task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+           
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Task Detail Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Task Title</label>
+                        <input type="text" class="form-control" id="taskTitle" placeholder="Enter task title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="taskDescription" rows="4" placeholder="Enter task description"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Priority</label>
+                                <select class="form-select" id="taskPriority">
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Due Date</label>
+                                <input type="date" class="form-control" id="taskDueDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Assignee</label>
+                        <input type="text" class="form-control" id="taskAssignee" placeholder="Enter assignee name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveTask()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // JavaScript functionality
+    function openTaskModal(taskId) {
+        const modal = new bootstrap.Modal(document.getElementById('taskModal'));
+        modal.show();
+    }
+
+    function addNewTask(column) {
+        const modal = new bootstrap.Modal(document.getElementById('taskModal'));
+        // Clear form for new task
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskDescription').value = '';
+        document.getElementById('taskPriority').value = 'medium';
+        document.getElementById('taskDueDate').value = '';
+        document.getElementById('taskAssignee').value = '';
+        modal.show();
+    }
+
+    function saveTask() {
+        // Get form values
+        const title = document.getElementById('taskTitle').value;
+        const description = document.getElementById('taskDescription').value;
+        const priority = document.getElementById('taskPriority').value;
+        const dueDate = document.getElementById('taskDueDate').value;
+        const assignee = document.getElementById('taskAssignee').value;
+
+        if (!title.trim()) {
+            alert('Please enter a task title');
+            return;
+        }
+
+        // Here you would typically save to a database
+        console.log('Task saved:', { title, description, priority, dueDate, assignee });
+
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('taskModal'));
+        modal.hide();
+
+        // Show success message
+        showNotification('Task saved successfully!', 'success');
+    }
+
+    function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Auto-dismiss after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
+    }
+
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const filter = this.textContent.toLowerCase();
+            console.log('Filter applied:', filter);
+            // Add filtering logic here
+        });
+    });
+
+    // Sidebar navigation
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Drag and drop functionality (basic implementation)
+    let draggedElement = null;
+
+    document.querySelectorAll('.task-card').forEach(card => {
+        card.draggable = true;
+
+        card.addEventListener('dragstart', function(e) {
+            draggedElement = this;
+            this.style.opacity = '0.5';
+        });
+
+        card.addEventListener('dragend', function(e) {
+            this.style.opacity = '';
+        });
+    });
+
+    document.querySelectorAll('.column-content').forEach(column => {
+        column.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.backgroundColor = '#F4F9FF';
+        });
+
+        column.addEventListener('dragleave', function(e) {
+            this.style.backgroundColor = '';
+        });
+
+        column.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.backgroundColor = '';
+
+            if (draggedElement && this !== draggedElement.parentNode) {
+                this.insertBefore(draggedElement, this.querySelector('.add-task-btn'));
+                showNotification('Task moved successfully!', 'success');
+            }
+        });
+    });
+</script>
