@@ -1,4 +1,7 @@
-﻿@{
+﻿
+@model List<Expense.Application.ModelViews.WorkPlanDto>
+
+@{
     ViewData["Title"] = "ToDo List";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -7,6 +10,30 @@
     .card-title {
         padding: 7px 0 0px 0;
     }
+    .labletitle{
+        color:green;
+        font-weight:700;
+    }
+
+    .labletitles {
+        color: #011f56;
+        font-weight: 700;
+    }
+    .btn-custom {
+        background-color: #012970;
+        border-color: #012970;
+        color: #ffffff;
+    }
+
+        .btn-custom:hover {
+            background-color: #011f56; /* slightly darker for hover */
+            border-color: #011f56;
+            color: #ffffff;
+        }
+
+        .btn-custom:focus {
+            box-shadow: 0 0 0 0.2rem rgba(1, 41, 112, 0.25);
+        }
 </style>
 
 <div class="pagetitle">
@@ -28,14 +55,71 @@
                 <form method="post" asp-action="Index" asp-controller="Work" asp-area="Admin">
                     <div class="row">
                         <div class="col-md-10">
-                            <input type="text" id="taskInput" class="form-control" placeholder="Add new task…" required>
+                            <input type="text" id="taskInput" name="taskInput" class="form-control" placeholder="Add new task…" required>
                         </div>
                         <div class="col-md-2 d-grid">
-                            <button type="submit" class="btn btn-primary">Add New</button>
+                            <button type="submit" class="btn btn-custom">Add New</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12 card">
+            <div class="card-title">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Data Table</h5>
+                    <button class="btn btn-custom btn-sm d-none">
+                        Work Done
+                    </button>
+                </div>
+            </div>
+            <div class="card-body mt-4">
+                <table class="table table-borderless">
+                    @foreach(var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="form-check d-flex align-items-center gap-2">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="@item.Id"
+                                           onchange="updateWorkPlan(this)"
+                                           @(item.IsTrue == 1 ? "checked" : "") />
+                    
+                                    <label class="form-check-label @(item.IsTrue == 1 ? "text-decoration-line-through labletitle" : "labletitles")">
+                                        @item.ValueType | @item.CreateDate.ToString("MMM-dd-yyyy")
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                   
+                </table>
+            </div>
+        </div>
+    </div>
 </section>
+
+<script>
+    function updateWorkPlan(checkbox) {
+
+        var id = checkbox.value;
+        if(id==null)return alert("Error Section Checkbox");
+        var isTrue = checkbox.checked ? 1 : 0;
+        debugger;
+           fetch('/Admin/Work/UpdateStatus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify({ Id: id, isTrue: isTrue })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Update UI
+                    window.location.reload();
+                }
+            });
+    }
+</script>

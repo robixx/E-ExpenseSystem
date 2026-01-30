@@ -23,6 +23,7 @@ namespace Expense.Infrastructure
             services.AddScoped<IIncome, IncomeService>();
             services.AddScoped<IExpenseDashboardService, ExpenseDashboardService>();
             services.AddScoped<IActivityLogService, ActivityLogService>();
+            services.AddScoped<IWorkData, WorkerService>();
             services.AddScoped<ActivityLogFilter>();
         }
     }
