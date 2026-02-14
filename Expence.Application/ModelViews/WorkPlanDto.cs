@@ -13,5 +13,6 @@ namespace Expense.Application.ModelViews
         public int CreatedBy { get; set; }
         public int IsTrue { get; set; }
         public DateTime CreateDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

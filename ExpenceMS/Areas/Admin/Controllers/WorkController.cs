@@ -75,7 +75,7 @@ namespace ExpenceMS.Areas.Admin.Controllers
             {
                 Id =model.Id,
                 IsTrue = model.IsTrue,
-                CreateDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
                 ValueType = "",
                 CreatedBy = userId,
             };

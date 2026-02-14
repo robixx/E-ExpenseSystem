@@ -56,7 +56,7 @@ namespace Expense.Infrastructure.Service
                         if (da != null)
                         {
                             da.IsTrue = work.IsTrue;
-                            da.CreateDate = work.CreateDate;
+                            da.UpdatedDate = DateTime.Now;
                         }
                        
                     }
